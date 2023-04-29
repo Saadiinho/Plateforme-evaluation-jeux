@@ -69,16 +69,16 @@ public class Joueur extends Invite{
 	        System.out.print("Combien de jetons voulez-vous mettre pour ce jeu ? ");
 	        int nombre = scanner.nextInt();
 	        while (nombre > nbJetons) {
-	            System.out.println("Désolé, vous n'avez pas assez de jetons...");
+	            System.out.println("Desole, vous n'avez pas assez de jetons...");
 	            System.out.println("Veuillez réessayer : ");
 	            nombre = scanner.nextInt();
 	        }
 	        jeu.ajouteJeton(nombre);
-	        System.out.println("Jetons placés !");
+	        System.out.println("Jetons places !");
 	        nbJetons = nbJetons - nombre;
 	        System.out.println("Il vous reste " + nbJetons + " jetons.");
 	    } catch (NoSuchElementException e) {
-	        System.out.println("Erreur : Entrée invalide.");
+	        System.out.println("Erreur : Entree invalide.");
 	    } finally {
 	        scanner.close();
 	    }
@@ -86,7 +86,7 @@ public class Joueur extends Invite{
 
 	public void ecrireEvaluation() {
 	    Scanner scanner = new Scanner(System.in);
-	    System.out.println("Sur quel jeu voulez-vous écrire une évaluation ?");
+	    System.out.println("Sur quel jeu voulez-vous écrire une evaluation ?");
 	    String nomJeu = scanner.nextLine();
 	    JeuxVideo jeu = recupererJeu(nomJeu);
 
