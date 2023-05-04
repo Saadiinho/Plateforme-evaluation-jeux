@@ -17,6 +17,7 @@ public class Joueur extends Invite{
 		this.pseudo = pseudo;
 		jeuxPossedee = new ArrayList<JeuxVideo>();
 	}
+	
 
 	//Guetteurs et Setteurs
 	public String getPseudo() {
@@ -52,49 +53,52 @@ public class Joueur extends Invite{
 	}
 	
 	//Méthodes
+	
+	public void placerJeton(GameBank listeJeu) {
+	    Scanner scanner = new Scanner(System.in);
+	    try {
+	    	System.out.println("Sur quel jeu, voulez-vous place des jetons ?");
+	    	String nomJeu = scanner.nextLine();
+	        JeuxVideo jeu = listeJeu.recupererJeu(nomJeu);
+	        if (jeu == null) {
+		        System.out.println("Le jeu specifie n'existe pas.");
+		        return;
+		    }
+	        System.out.println("Combien de jetons voulez-vous placer ? ");
+	        int nombre = scanner.nextInt();
+	        while ((nombre > nbJetons) || (nombre < 0)) {
+	        	if (nombre > nbJetons) {
+	        		System.out.println("Vous n'avez pas assez de jetons, veuillez reessayer : ");
+	        	}
+	        	if (nombre < 0) {
+	        		System.out.println("Erreur de saisie, veuillez reessayer : ");
+	        	}
+	        	nombre = scanner.nextInt();
+	        }
+	        jeu.ajouteJeton(nombre);
+	        System.out.println("Le nombre de jetons est de " + jeu.getNbJetons() + " jetons.");
+	        nbJetons = nbJetons - nombre;
+	    } catch (NoSuchElementException e) {
+	        System.out.println("Erreur : Entree invalide.");
+	    }
+	}
 	public JeuxVideo recupererJeu(String nomJeu) {
-		for (JeuxVideo jeu : jeuxPossedee){
+		for (JeuxVideo jeu : jeuxPossedee) {
 			if (jeu.getNom().equals(nomJeu)) {
 				return jeu;
 			}
 		}
 		return null;
 	}
-	public void placerJeton() {
-	    Scanner scanner = new Scanner(System.in);
-	    try {
-	        System.out.println("Sur quel jeu, voulez-vous placer des jetons ?");
-	        String nomJeu = scanner.nextLine();
-	        JeuxVideo jeu = recupererJeu(nomJeu);
-	        System.out.print("Combien de jetons voulez-vous mettre pour ce jeu ? ");
-	        int nombre = scanner.nextInt();
-	        while (nombre > nbJetons) {
-	            System.out.println("Desole, vous n'avez pas assez de jetons...");
-	            System.out.println("Veuillez réessayer : ");
-	            nombre = scanner.nextInt();
-	        }
-	        jeu.ajouteJeton(nombre);
-	        System.out.println("Jetons places !");
-	        nbJetons = nbJetons - nombre;
-	        System.out.println("Il vous reste " + nbJetons + " jetons.");
-	    } catch (NoSuchElementException e) {
-	        System.out.println("Erreur : Entree invalide.");
-	    } finally {
-	        scanner.close();
-	    }
-	}
-
 	public void ecrireEvaluation() {
 	    Scanner scanner = new Scanner(System.in);
-	    System.out.println("Sur quel jeu voulez-vous écrire une evaluation ?");
+	    System.out.println("Sur quel jeu voulez-vous ecrire une evaluation ?");
 	    String nomJeu = scanner.nextLine();
 	    JeuxVideo jeu = recupererJeu(nomJeu);
-
 	    if (jeu == null) {
-	        System.out.println("Le jeu spécifié n'existe pas.");
+	        System.out.println("Vous ne possede pas le jeu specifie.");
 	        return;
 	    }
-
 	    System.out.println("Donnez votre évaluation :");
 	    String texte = scanner.nextLine();
 
@@ -103,7 +107,7 @@ public class Joueur extends Invite{
 	        return;
 	    }
 
-	    System.out.println("Entrez la date de l'évaluation :");
+	    System.out.println("Entrez la date de l'évaluation : (AAAAMMJJ)");
 	    double date;
 	    if (!scanner.hasNextDouble()) {
 	        System.out.println("La date doit être un nombre.");
@@ -112,43 +116,68 @@ public class Joueur extends Invite{
 	    date = scanner.nextDouble();
 
 	    System.out.println("Entrez la version du jeu :");
-	    double numVersion;
-	    if (!scanner.hasNextDouble()) {
+	    float numVersion;
+	    if (!scanner.hasNextFloat()) {
 	        System.out.println("La version doit être un nombre.");
 	        return;
 	    }
-	    numVersion = scanner.nextDouble();
-
-	    scanner.close();
-	    Evaluation evaluation = new Evaluation(date, texte ,numVersion);
-	    jeu.ajouteEvaluation(evaluation);
+	    numVersion = scanner.nextFloat();
+	    Evaluation evaluation = new Evaluation(date, texte , numVersion, pseudo);
 	    nbEvaluation++;
+	    jeu.ajouteEvaluation(evaluation);
 	}
-
-	public void ajouteJeux(String nomJeu) {
-		GameBank listeJeu = new GameBank();
-		listeJeu.chargerListeJeu();
-		JeuxVideo nouveauJeu = listeJeu.recupererJeu(nomJeu); 
-		jeuxPossedee.add(nouveauJeu);
+	public boolean presenceJeu(JeuxVideo nouveauJeu) {
+		for (JeuxVideo jeu : jeuxPossedee) {
+			if (jeu.equals(nouveauJeu)) {
+				return true;
+			}
+		}
+		return false;
 	}
-	public void consulterTest() {
+	public void ajouteJeux(String nomJeu, GameBank listeJeu) {
+		JeuxVideo nouveauJeu = listeJeu.recupererJeu(nomJeu);
+		if (nouveauJeu != null) {
+			if (presenceJeu(nouveauJeu)) {
+				System.out.println("Vous possede deja le jeu.");
+				return;
+			}
+			else {
+				jeuxPossedee.add(nouveauJeu);
+				System.out.println("Jeu ajoute avec succes !");
+				return;
+			}			
+		}
+		else {
+			System.out.println("Le jeu specifie n'existe pas.");
+			return;
+		}
+	}
+	public void consulterTest(GameBank listeJeu) {
 		Scanner scanner = new Scanner(System.in);
+		System.out.println("Sur quel jeu voulez-vous consulter les tests ?");
 		String nomJeu = scanner.nextLine();
-		GameBank listeJeu = new GameBank();
-		listeJeu.chargerListeJeu();
 		JeuxVideo jeu = listeJeu.recupererJeu(nomJeu); 
+		if (jeu == null) {
+			System.out.println("Le jeu specifie n'existe pas.");
+	        return;
+		}
 		for (int i = 0; i < jeu.getEnsembleTest().size(); i++) {
 			System.out.println(jeu.getEnsembleTest().get(i) + "\n");
 		}
-		scanner.close();
 	}
 	
 	
 	
 	@Override
 	public String toString() {
-		return "Bienvenue " + pseudo + " ! Vous avez " + nbJetons + " jetons. Vos jeux sont " + arrayListToString()
-				+ ". Vous avez ecrit " + nbEvaluation + " evaluations.";
+		if (jeuxPossedee.size() > 0) {
+			return "Bienvenue " + pseudo + " ! Vous avez " + nbJetons + " jetons. Vos jeux sont " + arrayListToString()
+					+ ". Vous avez ecrit " + nbEvaluation + " evaluations.";
+		}
+		else {
+			return "Bienvenue " + pseudo + " ! Vous avez " + nbJetons + " jetons. Vous n'avez pas encore de jeux"
+			+ ". Vous avez ecrit " + nbEvaluation + " evaluations.";
+		}
 	}
 
 	public static void main(String[] args) {
