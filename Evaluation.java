@@ -1,20 +1,20 @@
 package projet;
 
 public class Evaluation {
+	private String pseudo;
 	private double date;
 	private String evaluation;
-	private double numVersion;
+	private float numVersion;
 	private int nbPouceBleu = 0;
 	private int nbPouceRouge = 0;
 	private boolean signale = false;
 	
 	//Constructeurs
-	public Evaluation(double date, String evaluation, double numVersion) {
+	public Evaluation(double date, String evaluation, float numVersion, String pseudo) {
 		this.date = date;
 		this.evaluation = evaluation;
 		this.numVersion = numVersion;
-		this.nbPouceBleu = nbPouceBleu;
-		this.nbPouceRouge = nbPouceRouge;
+		this.pseudo = pseudo;
 	}
 	
 	//Guetteurs et Setteurs
@@ -30,10 +30,12 @@ public class Evaluation {
 	public boolean getSignale() {
 		return signale;
 	}
-	public double getNumVersion() {
+	public float getNumVersion() {
 		return numVersion;
 	}
-
+	public String getPseudo() {
+		return pseudo;
+	}
 	public double getDate() {
 		return date;
 	}
@@ -51,7 +53,12 @@ public class Evaluation {
 		nbPouceRouge += 1;
 		System.out.println("Le nombre de 'Je n'aime pas' pour cette évaluation est : " + getnbPouceRouge());
 	}
-	
+	@Override
+	public String toString() {
+		return "Evaluation de " + pseudo + " : [date = " + date + ", evaluation = " + evaluation + ", numVersion = " + numVersion
+				+ ", nbPouceBleu = " + nbPouceBleu + ", nbPouceRouge = " + nbPouceRouge + "]";
+	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
