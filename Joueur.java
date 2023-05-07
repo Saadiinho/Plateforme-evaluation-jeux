@@ -51,9 +51,17 @@ public class Joueur extends Invite{
 	public void seDeconnecter() {
 		connectee = false;
 	}
+	public void setNbJetons(int nbJetons) {
+		this.nbJetons = nbJetons;
+	}
+	public void setPseudoAdmin() {
+		this.pseudo = "admin";
+	}
 	
 	//Méthodes
-	
+	public void ajoutJetons() {
+		this.setNbJetons(nbJetons + 1);
+	}
 	public void placerJeton(GameBank listeJeu) {
 	    Scanner scanner = new Scanner(System.in);
 	    try {
@@ -76,8 +84,8 @@ public class Joueur extends Invite{
 	        	nombre = scanner.nextInt();
 	        }
 	        jeu.ajouteJeton(nombre);
-	        System.out.println("Le nombre de jetons est de " + jeu.getNbJetons() + " jetons.");
 	        nbJetons = nbJetons - nombre;
+	        System.out.println("Le nombre de vos jetons est de " + nbJetons + " jetons.");
 	    } catch (NoSuchElementException e) {
 	        System.out.println("Erreur : Entree invalide.");
 	    }
@@ -165,18 +173,41 @@ public class Joueur extends Invite{
 			System.out.println(jeu.getEnsembleTest().get(i) + "\n");
 		}
 	}
-	
+	public void avisEvaluation(GameBank listeJeu) {
+		Scanner scanner = new Scanner(System.in);
+		this.consulterEvaluation(listeJeu);
+		JeuxVideo jeu = this.rechercherJeu(listeJeu);
+		System.out.println("Dans quel evaluation voulez vous donner votre avis ? (Donnez le numero)");
+		int numEval = scanner.nextInt();
+		Evaluation evaluation = jeu.getEnsembleEvaluation().get(numEval - 1);
+		System.out.println("Aimez-vous cette evaluation ? (y/n)");
+		String rep = scanner.next();
+		while (!rep.equals("y") && !rep.equals("n")){
+			System.out.println("Erreur de saisie, veuillez reessayer : ");
+			rep = scanner.next();
+		}	
+		if (rep.equals("y")) {
+			evaluation.ajoutePouceBleu();
+			if (evaluation.verifJaime()) {
+				ajoutJetons();
+			}
+		}
+		else if (rep.equals("n")){
+			evaluation.ajoutePouceRouge();
+		}
+		System.out.println("Ajout reussi avec succes !");
+	}
 	
 	
 	@Override
 	public String toString() {
 		if (jeuxPossedee.size() > 0) {
-			return "Bienvenue " + pseudo + " ! Vous avez " + nbJetons + " jetons. Vos jeux sont " + arrayListToString()
-					+ ". Vous avez ecrit " + nbEvaluation + " evaluations.";
+			return pseudo + " : nombre de jetons :  " + nbJetons + "\nListe jeu " + arrayListToString()
+					+ " nombre evaluation : " + nbEvaluation;
 		}
 		else {
-			return "Bienvenue " + pseudo + " ! Vous avez " + nbJetons + " jetons. Vous n'avez pas encore de jeux"
-			+ ". Vous avez ecrit " + nbEvaluation + " evaluations.";
+			return pseudo + " : nombre de jetons :  " + nbJetons + "\nListe jeu " + arrayListToString()
+			+ "\nnombre evaluation : " + nbEvaluation;
 		}
 	}
 
