@@ -11,7 +11,9 @@ public class Administrateur extends Testeur{
 	//Guetteurs et Setteurs
 	
 	//Méthodes
-	public void supprimerEvaluation(JeuxVideo jeu) {
+	public void supprimerEvaluation(GameBank listeJeu) {
+		this.consulterEvaluation(listeJeu);
+		JeuxVideo jeu = this.rechercherJeu(listeJeu);
 		System.out.println("Quel évaluation voulez-vous supprimez ? ");
 		Scanner scanner = new Scanner(System.in);
 		 int nombre = scanner.nextInt();
@@ -21,9 +23,14 @@ public class Administrateur extends Testeur{
 		 jeu.supprimeEvaluation(nombre);
 	     scanner.close();
 	}
-	public void proumouvoirJoueur(Joueur joueur) {
-		Testeur testeur = new Testeur(joueur.getPseudo());
-		
+	public void promouvoirJoueur(Joueur joueur) {
+		Testeur testeur = (Testeur) joueur;
+		System.out.println("Joueur promu avec succes !");
+	}
+	public void promouvoirTesteur(Testeur testeur) {
+		Administrateur adminnistrateur = (Administrateur) testeur;
+		testeur.setPseudoAdmin();
+		System.out.println("Testeur promu avec succes !");
 	}
 	
 	public static void main(String[] args) {
