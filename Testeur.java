@@ -95,6 +95,9 @@ public class Testeur extends Joueur{
 	public void evaluationProblematique(GameBank listeJeu) {
 		this.consulterEvaluation(listeJeu);
 		JeuxVideo jeu = this.rechercherJeu(listeJeu);
+		if (jeu == null) {
+			return;
+		}
 		System.out.println("Quel évaluation voulez-vous signale ? ");
 		Scanner scanner = new Scanner(System.in);
 		 int nombre = scanner.nextInt();
