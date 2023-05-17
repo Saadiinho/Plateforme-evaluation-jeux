@@ -13,29 +13,30 @@ public class GameBank {
 	
 	public GameBank() {
 		listeJeu = new ArrayList<JeuxVideo>();
-		String fichierCSV = "C:\\Users\\saadr\\OneDrive\\Documents\\Ecole\\Informatique\\Java\\Projet_ecole\\src\\projet\\donneeJeu.csv";
-        try (BufferedReader br = new BufferedReader(new FileReader(fichierCSV))) {
-            
+		String fichierCSV = "https://raw.githubusercontent.com/charlesbrantstec/VGSalesRatings/28980b2078f851b30d449186a45cb5127d81ea60/VG/output_csv/vg_data.csv";
+        try {
+            URL url = new URL(fichierCSV);
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
             String line;
-        	String nom;
-        	String plateforme;
-        	String anneeSortie;
-        	String categorie;
-        	String editeur;
-        	String naSales;
-        	String euSales;
-        	String jpSales;
-        	String otherSales;
-        	String globalSales;
-        	String Critic_Score;
-        	String Critic_Count;
-        	String User_Score;
-        	String userCount;
-        	String developpeur;
-        	String classement;
             while ((line = br.readLine()) != null) {
             	String[] donnee = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-                
+            	
+            	String nom;
+            	String plateforme;
+            	String anneeSortie;
+            	String categorie;
+            	String editeur;
+            	String naSales;
+            	String euSales;
+            	String jpSales;
+            	String otherSales;
+            	String globalSales;
+            	String Critic_Score;
+            	String Critic_Count;
+            	String User_Score;
+            	String userCount;
+            	String developpeur;
+            	String classement;
                 nom = donnee[1];
             	plateforme = donnee[2];
             	anneeSortie = donnee[3];
@@ -103,4 +104,9 @@ public class GameBank {
     	}
     	return null;
     }
+    public void consulterListeJeu() {
+		for (JeuxVideo j : listeJeu) {
+			System.out.println(j.toString());
+		}
+	}
 }
