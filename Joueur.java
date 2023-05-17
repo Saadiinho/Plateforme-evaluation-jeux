@@ -35,6 +35,9 @@ public class Joueur extends Invite{
 	public void setNbEvaluation(int nbEvaluation) {
 		this.nbEvaluation = nbEvaluation;
 	}
+	public int getNbEvaluation() {
+		return nbEvaluation;
+	}
 	public static String arrayListToString() {
 	    String resultat = "";
 	    for (JeuxVideo element : jeuxPossedee) {
@@ -107,15 +110,15 @@ public class Joueur extends Invite{
 	        System.out.println("Vous ne possede pas le jeu specifie.");
 	        return;
 	    }
-	    System.out.println("Donnez votre évaluation :");
+	    System.out.println("Donnez votre evaluation :");
 	    String texte = scanner.nextLine();
 
 	    if (texte.trim().isEmpty()) {
-	        System.out.println("L'évaluation ne peut pas être vide.");
+	        System.out.println("L'evaluation ne peut pas être vide.");
 	        return;
 	    }
 
-	    System.out.println("Entrez la date de l'évaluation : (AAAAMMJJ)");
+	    System.out.println("Entrez la date de l'evaluation : (AAAAMMJJ)");
 	    double date;
 	    if (!scanner.hasNextDouble()) {
 	        System.out.println("La date doit être un nombre.");
@@ -123,10 +126,10 @@ public class Joueur extends Invite{
 	    }
 	    date = scanner.nextDouble();
 
-	    System.out.println("Entrez la version du jeu :");
+	    System.out.println("Entrez la version du jeu : (un nombre entier)");
 	    float numVersion;
 	    if (!scanner.hasNextFloat()) {
-	        System.out.println("La version doit être un nombre.");
+	        System.out.println("La version doit tre un nombre.");
 	        return;
 	    }
 	    numVersion = scanner.nextFloat();
@@ -203,7 +206,7 @@ public class Joueur extends Invite{
 	public String toString() {
 		if (jeuxPossedee.size() > 0) {
 			return pseudo + " : nombre de jetons :  " + nbJetons + "\nListe jeu " + arrayListToString()
-					+ " nombre evaluation : " + nbEvaluation;
+					+ " \nnombre evaluation : " + nbEvaluation;
 		}
 		else {
 			return pseudo + " : nombre de jetons :  " + nbJetons + "\nListe jeu " + arrayListToString()
