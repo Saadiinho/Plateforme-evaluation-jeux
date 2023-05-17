@@ -13,6 +13,16 @@ public class Connexion {
 		listeTesteur = new ArrayList<Testeur>();
 		listeAdmin = new ArrayList<Administrateur>();
 	}
+	//Guetteur et Setteur
+	public static ArrayList<Joueur> getListeJoueurs() {
+		return listeJoueurs;
+	}
+	public static ArrayList<Testeur> getListeTesteur() {
+		return listeTesteur;
+	}
+	public static ArrayList<Administrateur> getListeAdmin() {
+		return listeAdmin;
+	}
 	
 	//Méthodes
 	public void ajouteNouveauJoueur(Joueur joueur) {
@@ -29,6 +39,9 @@ public class Connexion {
 		else {
 			System.out.println("Il n'y a pas encore de joueurs inscrits.");
 		}
+	}
+	public static void ajouteNouveauTesteur(Testeur test) {
+		listeTesteur.add(test);
 	}
 	public static void afficherListeTesteur() {
 		int i = 1;
@@ -54,11 +67,13 @@ public class Connexion {
         	System.out.println("4 - Consulter l'evaluation d'un jeu");
         	System.out.println("5 - Donner votre avis dans une evaluation");
         	System.out.println("6 - Ajouter un jeu a votre liste de jeu");
+        	System.out.println("7 - Consulter la liste de jeu");
+        	System.out.println("8 - Voir les informations du profil");
         	System.out.println("0 - Quitter");
         	System.out.print("Entrez votre choix: ");
         	String input = scanner.nextLine();
         	int choix = Integer.parseInt(input);
-        	while ((choix < 0) || (choix > 6) ) {
+        	while ((choix < 0) || (choix > 8) ) {
         		System.out.println("Erreur de saisie, veuillez réessayer : ");
         		input = scanner.nextLine();
         		choix = Integer.parseInt(input);
@@ -87,7 +102,7 @@ public class Connexion {
         	else if (choix == 5) {
         		joueurConnecte.avisEvaluation(listeJeu);
         	}
-        	else {
+        	else if (choix == 6){
         		//Méthode d'ajout de jeu
         		System.out.println("Quel est votre nouveau jeu ?");
         		String nouveauJeu = scanner.nextLine();
@@ -97,6 +112,12 @@ public class Connexion {
         		else {
         			System.out.println("Le jeu specifie n'existe pas.");
         		}
+        	}
+        	else if (choix == 7) {
+        		listeJeu.consulterListeJeu();
+        	}
+        	else {
+        		System.out.println(joueurConnecte.toString());
         	}
     	}
 	}
@@ -159,10 +180,10 @@ public class Connexion {
 			while (choix != 0) {
 				if (choix == 1) {
 					seConnecterTesteur(listeJeu, admin);
+					break;
 				}
 				else {
 					//Mode Administrateur
-					//Mode testeur
 					System.out.println("1 - Promouvoir un testeur");
 					System.out.println("2 - Promouvoir un joueur");
 					System.out.println("3 - Supprimer une evaluation");
@@ -207,7 +228,7 @@ public class Connexion {
 						admin.promouvoirTesteur(listeTesteur.get(numero - 1));
 					}
 					else {
-						admin.evaluationProblematique(listeJeu);
+						admin.supprimerEvaluation(listeJeu);
 					}
 				}
 			}
@@ -232,7 +253,9 @@ public class Connexion {
 	        }
 	        if (joueurConnecte != null) {
 	        	if (!joueurConnecte.getPseudo().equals("admin")) {
-	        		seConnecterJoueur(listeJeu, joueurConnecte);
+	        		if (joueurConnecte instanceof Testeur) {
+	        			seConnecterTesteur(listeJeu, (Testeur) joueurConnecte);
+	        		}
 	        	}
 	        	else {
 	        		Administrateur admin = new Administrateur();
@@ -253,6 +276,8 @@ public class Connexion {
 	               if (reponse.equals("y")) {
 	                   //Créer un compte
 	            	   Joueur j = new Joueur(pseudo);
+	            	   listeJoueurs.add(j);
+	            	   System.out.println("Compte cree avec succes !");
 	            	   connexion();
 	                   //Un joueur est construit
 	                   //Son pseudo est ajouté à la liste de joueurs inscrits
@@ -274,12 +299,14 @@ public class Connexion {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Joueur j1 = new Joueur("test");
-		Joueur j2 = new Joueur("admin");
+		Administrateur j2 = new Administrateur();
+		Testeur j3 = new Testeur("Saad");
 		GameBank listeJeu = new GameBank();
 		j1.setNbEvaluation(3);
 		Connexion test = new Connexion();
 		test.ajouteNouveauJoueur(j1);
-		test.ajouteNouveauJoueur(j2);
+		test.ajouteNouveauTesteur(j2);
+		test.ajouteNouveauJoueur(j3);
 		connexion();
 	}
     
